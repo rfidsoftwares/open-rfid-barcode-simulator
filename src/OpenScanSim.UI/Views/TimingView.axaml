@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:OpenScanSim.UI.ViewModels"
+             xmlns:enums="using:OpenScanSim.Common.Enums"
+             x:Class="OpenScanSim.UI.Views.TimingView"
+             x:DataType="vm:TimingViewModel">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="20" Margin="24">
+
+      <!-- Header -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="Timing &amp; Wedge Engine" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+        <TextBlock Text="Configure physical scanner hardware transmission speeds, human typing jitter, and keystroke delimiters."
+                   FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" />
+      </StackPanel>
+
+      <!-- Transmission Mode Card -->
+      <Border Classes="Card">
+        <StackPanel Spacing="16">
+          <TextBlock Text="TRANSMISSION SPEED MODE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+
+          <Grid ColumnDefinitions="*,*">
+            <RadioButton Grid.Column="0" Content="⚡ Fast Device Burst (Instant HW &lt;8ms)"
+                         IsChecked="{Binding Mode, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static enums:SimulationMode.FastDeviceBurst}}"
+                         GroupName="SimModeGroup" Margin="0,0,12,0" />
+            <RadioButton Grid.Column="1" Content="👤 Human Typing Simulation (Realistic Jitter &amp; Typos)"
+                         IsChecked="{Binding Mode, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static enums:SimulationMode.HumanTyping}}"
+                         GroupName="SimModeGroup" />
+          </Grid>
+
+          <!-- Human Typing Options -->
+          <Border Background="{StaticResource BgInputDarkBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8" Padding="16">
+            <StackPanel Spacing="12">
+              <TextBlock Text="HUMAN TYPING ENGINE SETTINGS" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrandPrimaryHoverBrush}" />
+              <Grid ColumnDefinitions="*,*,*">
+                <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,12,0">
+                  <TextBlock Text="Typing Speed (ms/char):" Foreground="{StaticResource TextPrimaryBrush}" />
+                  <NumericUpDown Value="{Binding HumanTypingSpeedMs}" Minimum="10" Maximum="1000" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Spacing="6" Margin="0,0,12,0">
+                  <TextBlock Text="Gaussian Jitter (ms):" Foreground="{StaticResource TextPrimaryBrush}" />
+                  <NumericUpDown Value="{Binding HumanJitterMs}" Minimum="0" Maximum="500" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Spacing="6">
+                  <TextBlock Text="Typo Probability (%):" Foreground="{StaticResource TextPrimaryBrush}" />
+                  <NumericUpDown Value="{Binding TypoChancePercent}" Minimum="0" Maximum="50" Increment="0.5" />
+                </StackPanel>
+              </Grid>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Border>
+
+      <!-- Batch Intervals & Countdown Card -->
+      <Border Classes="Card">
+        <StackPanel Spacing="16">
+          <TextBlock Text="TIMING INTERVALS &amp; COUNTDOWN" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+
+          <Grid ColumnDefinitions="*,*,*">
+            <!-- Countdown -->
+            <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,12,0">
+              <TextBlock Text="Focus Switch Countdown (sec):" Foreground="{StaticResource TextPrimaryBrush}" />
+              <NumericUpDown Value="{Binding StartCountdownSeconds}" Minimum="0" Maximum="60" Increment="0.5" />
+              <TextBlock Text="Gives you time to click target input field." FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+            </StackPanel>
+
+            <!-- Delay Interval -->
+            <StackPanel Grid.Column="1" Spacing="6" Margin="0,0,12,0">
+              <TextBlock Text="Delay Between Reads (sec):" Foreground="{StaticResource TextPrimaryBrush}" />
+              <NumericUpDown Value="{Binding IntervalSeconds}" Minimum="0" Maximum="60" Increment="0.1" />
+              <TextBlock Text="Pause between scan events." FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+            </StackPanel>
+
+            <!-- Burst Batch Size -->
+            <StackPanel Grid.Column="2" Spacing="6">
+              <TextBlock Text="Burst Batch Size (items):" Foreground="{StaticResource TextPrimaryBrush}" />
+              <NumericUpDown Value="{Binding BurstBatchSize}" Minimum="1" Maximum="10000" />
+              <TextBlock Text="Number of tags per interval." FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+            </StackPanel>
+          </Grid>
+
+          <CheckBox Content="Loop Continuously (Infinite automated stream)" IsChecked="{Binding LoopContinuously}" Margin="0,4,0,0" />
+        </StackPanel>
+      </Border>
+
+      <!-- Keystroke Delimiters & Audio Card -->
+      <Border Classes="Card">
+        <StackPanel Spacing="16">
+          <TextBlock Text="KEYBOARD WEDGE TERMINATORS &amp; AUDIO" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+
+          <Grid ColumnDefinitions="*,*">
+            <!-- Prefix -->
+            <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,12,0">
+              <TextBlock Text="Prefix Keystrokes:" Foreground="{StaticResource TextPrimaryBrush}" />
+              <TextBox Classes="CodeBox" Text="{Binding Prefix, Mode=TwoWay}" Watermark="e.g. [SCAN]" />
+            </StackPanel>
+
+            <!-- Terminator -->
+            <StackPanel Grid.Column="1" Spacing="6">
+              <TextBlock Text="Line Suffix / Terminator:" Foreground="{StaticResource TextPrimaryBrush}" />
+              <ComboBox SelectedItem="{Binding Terminator}" HorizontalAlignment="Stretch">
+                <enums:OutputTerminator>Enter</enums:OutputTerminator>
+                <enums:OutputTerminator>Tab</enums:OutputTerminator>
+                <enums:OutputTerminator>Space</enums:OutputTerminator>
+                <enums:OutputTerminator>None</enums:OutputTerminator>
+                <enums:OutputTerminator>Custom</enums:OutputTerminator>
+              </ComboBox>
+            </StackPanel>
+          </Grid>
+
+          <CheckBox Content="Play hardware scanner beep feedback on read (2400Hz synthesizer)" IsChecked="{Binding AudioFeedbackEnabled}" />
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

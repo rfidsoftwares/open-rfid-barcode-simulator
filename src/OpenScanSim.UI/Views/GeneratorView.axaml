@@ -1,0 +1,173 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:OpenScanSim.UI.ViewModels"
+             xmlns:enums="using:OpenScanSim.Common.Enums"
+             x:Class="OpenScanSim.UI.Views.GeneratorView"
+             x:DataType="vm:GeneratorViewModel">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="20" Margin="24">
+
+      <!-- Header -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="Advanced Data Generator" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+        <TextBlock Text="Configure synthetic tag masks, paste raw lists of EPCs/Barcodes, or stream multi-million row files."
+                   FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" />
+      </StackPanel>
+
+      <!-- Data Source Mode Selector -->
+      <Border Classes="Card" Background="#0C1322" Padding="12">
+        <StackPanel Spacing="10">
+          <TextBlock Text="DATA GENERATION SOURCE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+          <Grid ColumnDefinitions="*,*,*">
+            <Button Grid.Column="0" Command="{Binding SelectMaskModeCommand}"
+                    Classes.PrimaryBtn="{Binding IsMaskMode}" Classes.GhostBtn="{Binding !IsMaskMode}" Margin="0,0,6,0">
+              <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                <TextBlock Text="⚡" />
+                <TextBlock Text="SYNTHETIC MASK TEMPLATE" FontWeight="SemiBold" />
+              </StackPanel>
+            </Button>
+
+            <Button Grid.Column="1" Command="{Binding SelectPastedModeCommand}"
+                    Classes.PrimaryBtn="{Binding IsPastedMode}" Classes.GhostBtn="{Binding !IsPastedMode}" Margin="0,0,6,0">
+              <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                <TextBlock Text="📋" />
+                <TextBlock Text="PASTE DIRECT LIST (RAW IDs)" FontWeight="SemiBold" />
+              </StackPanel>
+            </Button>
+
+            <Button Grid.Column="2" Command="{Binding SelectFileModeCommand}"
+                    Classes.PrimaryBtn="{Binding IsFileStreamMode}" Classes.GhostBtn="{Binding !IsFileStreamMode}">
+              <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                <TextBlock Text="📁" />
+                <TextBlock Text="FILE STREAM (MMF / CSV)" FontWeight="SemiBold" />
+              </StackPanel>
+            </Button>
+          </Grid>
+        </StackPanel>
+      </Border>
+
+      <!-- MODE 1: Mask Pattern Config Card -->
+      <Border Classes="Card" IsVisible="{Binding IsMaskMode}">
+        <StackPanel Spacing="16">
+          <TextBlock Text="SYNTHETIC MASK TEMPLATE ENGINE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+
+          <StackPanel Spacing="8">
+            <TextBlock Text="Pattern Template Expression:" FontWeight="Medium" Foreground="{StaticResource TextPrimaryBrush}" />
+            <TextBox Classes="CodeBox" Text="{Binding MaskPattern, Mode=TwoWay}" FontSize="15" />
+            <TextBlock Text="Dynamic tokens: {HEX:n} = Random hex of length n, {SEQ:n} = Padded sequence, {UUID} = Guid, # = Digits, H = Hex, X = Alphanumeric"
+                       FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- MODE 2: Direct Pasted List Card -->
+      <Border Classes="Card" IsVisible="{Binding IsPastedMode}">
+        <StackPanel Spacing="16">
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Grid.Column="0" Spacing="4">
+              <TextBlock Text="DIRECT PASTED IDS / BARCODES QUEUE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+              <TextBlock Text="Paste your exact list of EPCs, Barcodes, or NFC tags below (one entry per line)."
+                         FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" />
+            </StackPanel>
+
+            <!-- Quick Action Buttons -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+              <Button Classes="GhostBtn" Command="{Binding LoadSamplePastedListCommand}">
+                <TextBlock Text="📋 Load Sample List (20 EPCs)" FontSize="12" />
+              </Button>
+              <Button Classes="GhostBtn" Command="{Binding ClearPastedListCommand}">
+                <TextBlock Text="🗑️ Clear List" FontSize="12" />
+              </Button>
+            </StackPanel>
+          </Grid>
+
+          <!-- Status Badge -->
+          <Border Background="#1E293B" CornerRadius="6" Padding="10,6" HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <TextBlock Text="✓" Foreground="{StaticResource AccentSuccessBrush}" FontWeight="Bold" />
+              <TextBlock Text="{Binding PastedListSummary}" Foreground="{StaticResource BrandCyanBrush}" FontWeight="SemiBold" FontSize="12" />
+            </StackPanel>
+          </Border>
+
+          <!-- Multi-line Text Editor -->
+          <TextBox Classes="CodeBox"
+                   Text="{Binding PastedListText, Mode=TwoWay}"
+                   AcceptsReturn="True"
+                   AcceptsTab="True"
+                   Height="200"
+                   FontSize="13"
+                   FontFamily="Consolas, monospace"
+                   Watermark="Paste EPC / Barcode list here (one per line)...&#x0a;E28033000F000F0F3BC9B222&#x0a;E28033000F00050A6847166C&#x0a;E28033000F000102B7C62064" />
+        </StackPanel>
+      </Border>
+
+      <!-- MODE 3: External File Stream Source Card -->
+      <Border Classes="Card" IsVisible="{Binding IsFileStreamMode}">
+        <StackPanel Spacing="16">
+          <TextBlock Text="EXTERNAL DATA SOURCE (CSV / TXT / MMF)" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+          
+          <CheckBox Content="Stream payloads directly from external file (Zero-RAM Memory-Mapped Stream)" IsChecked="{Binding UseFileStream}" />
+
+          <StackPanel Spacing="8" IsEnabled="{Binding UseFileStream}">
+            <TextBlock Text="File System Path:" FontWeight="Medium" Foreground="{StaticResource TextPrimaryBrush}" />
+            <TextBox Classes="CodeBox" Text="{Binding SourceFilePath, Mode=TwoWay}" Watermark="C:\data\rfid_tags.csv" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- Live Preview Box -->
+      <Border Background="{StaticResource BgInputDarkBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8" Padding="14">
+        <StackPanel Spacing="4">
+          <TextBlock Text="LIVE PAYLOAD EVALUATION PREVIEW" FontSize="10" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" />
+          <TextBlock Text="{Binding PreviewPayload}" FontFamily="Consolas, monospace" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" />
+        </StackPanel>
+      </Border>
+
+      <!-- Common Controls & Options -->
+      <Border Classes="Card">
+        <StackPanel Spacing="16">
+          <TextBlock Text="BATCH &amp; SYMBOLOGY SETTINGS" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+
+          <!-- Sequence Controls Grid -->
+          <Grid ColumnDefinitions="*,*,*">
+            <!-- Start Sequence -->
+            <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,12,0">
+              <TextBlock Text="Start Sequence Number:" FontWeight="Medium" Foreground="{StaticResource TextPrimaryBrush}" />
+              <NumericUpDown Value="{Binding StartSequence}" Minimum="1" Maximum="1000000000" />
+            </StackPanel>
+
+            <!-- Total Scans -->
+            <StackPanel Grid.Column="1" Spacing="6" Margin="0,0,12,0">
+              <TextBlock Text="Total Batch Count:" FontWeight="Medium" Foreground="{StaticResource TextPrimaryBrush}" />
+              <NumericUpDown Value="{Binding TotalCount}" Minimum="1" Maximum="1000000000" />
+            </StackPanel>
+
+            <!-- Symbology -->
+            <StackPanel Grid.Column="2" Spacing="6">
+              <TextBlock Text="Barcode Symbology:" FontWeight="Medium" Foreground="{StaticResource TextPrimaryBrush}" />
+              <ComboBox SelectedItem="{Binding SelectedSymbology}" HorizontalAlignment="Stretch">
+                <enums:BarcodeSymbology>Code128</enums:BarcodeSymbology>
+                <enums:BarcodeSymbology>Ean13</enums:BarcodeSymbology>
+                <enums:BarcodeSymbology>UpcA</enums:BarcodeSymbology>
+                <enums:BarcodeSymbology>Code39</enums:BarcodeSymbology>
+                <enums:BarcodeSymbology>QrCode</enums:BarcodeSymbology>
+                <enums:BarcodeSymbology>DataMatrix</enums:BarcodeSymbology>
+              </ComboBox>
+            </StackPanel>
+          </Grid>
+
+          <!-- Options Checkboxes -->
+          <WrapPanel Orientation="Horizontal" Margin="0,8,0,0">
+            <CheckBox Content="Calculate &amp; Append Modulo Check Digits" IsChecked="{Binding IncludeCheckDigit}" Margin="0,0,24,8" />
+            <CheckBox Content="Include GS1 / AIM Symbology Identifiers (]C1, ]Q1)" IsChecked="{Binding IncludeAimPrefix}" Margin="0,0,24,8" />
+            <CheckBox Content="Include EPC Gen2 TID Bank Data" IsChecked="{Binding IncludeTid}" Margin="0,0,24,8" />
+            <CheckBox Content="Include User Memory Bank Data" IsChecked="{Binding IncludeUserMemory}" Margin="0,0,24,8" />
+          </WrapPanel>
+
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

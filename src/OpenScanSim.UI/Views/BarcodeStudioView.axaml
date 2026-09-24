@@ -1,0 +1,82 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:OpenScanSim.UI.ViewModels"
+             xmlns:enums="using:OpenScanSim.Common.Enums"
+             x:Class="OpenScanSim.UI.Views.BarcodeStudioView"
+             x:DataType="vm:BarcodeStudioViewModel">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="20" Margin="24">
+
+      <!-- Header -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="Barcode &amp; 2D Symbology Studio" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+        <TextBlock Text="Format and verify 1D barcodes and 2D matrices with automatic Modulo check digits and AIM prefixes."
+                   FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" />
+      </StackPanel>
+
+      <!-- Symbology Setup Card -->
+      <Border Classes="Card">
+        <StackPanel Spacing="16">
+          <TextBlock Text="SYMBOLOGY CONFIGURATION" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+
+          <Grid ColumnDefinitions="*,*">
+            <!-- Symbology Dropdown -->
+            <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,12,0">
+              <TextBlock Text="Select Symbology:" FontWeight="Medium" Foreground="{StaticResource TextPrimaryBrush}" />
+              <ComboBox SelectedItem="{Binding Symbology}" HorizontalAlignment="Stretch">
+                <enums:BarcodeSymbology>Code128</enums:BarcodeSymbology>
+                <enums:BarcodeSymbology>Ean13</enums:BarcodeSymbology>
+                <enums:BarcodeSymbology>UpcA</enums:BarcodeSymbology>
+                <enums:BarcodeSymbology>Code39</enums:BarcodeSymbology>
+                <enums:BarcodeSymbology>QrCode</enums:BarcodeSymbology>
+                <enums:BarcodeSymbology>DataMatrix</enums:BarcodeSymbology>
+              </ComboBox>
+            </StackPanel>
+
+            <!-- Raw Payload -->
+            <StackPanel Grid.Column="1" Spacing="6">
+              <TextBlock Text="Raw Input Data:" FontWeight="Medium" Foreground="{StaticResource TextPrimaryBrush}" />
+              <TextBox Classes="CodeBox" Text="{Binding RawPayload, Mode=TwoWay}" Watermark="e.g. 400638133393" />
+            </StackPanel>
+          </Grid>
+
+          <!-- Toggles -->
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Calculate &amp; Append Modulo Check Digit" IsChecked="{Binding IncludeCheckDigit}" Margin="0,0,24,0" />
+            <CheckBox Content="Prepend AIM Symbology Identifier (]C1, ]Q1, ]d1)" IsChecked="{Binding IncludeAimPrefix}" />
+          </WrapPanel>
+
+        </StackPanel>
+      </Border>
+
+      <!-- Formatted Output & Immediate Injection Card -->
+      <Border Classes="Card">
+        <StackPanel Spacing="16">
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Grid.Column="0" Spacing="2">
+              <TextBlock Text="TRANSMISSION PREVIEW &amp; VALIDATION" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+              <TextBlock Text="{Binding ValidationStatus}" FontWeight="SemiBold" FontSize="12" Foreground="{Binding ValidationColor}" />
+            </StackPanel>
+
+            <!-- Inject Button -->
+            <Button Grid.Column="1" Classes="PrimaryBtn" Command="{Binding InjectSingleScanCommand}">
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <TextBlock Text="⚡" />
+                <TextBlock Text="INJECT SINGLE SCAN" />
+              </StackPanel>
+            </Button>
+          </Grid>
+
+          <Border Background="{StaticResource BgInputDarkBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8" Padding="14">
+            <StackPanel Spacing="4">
+              <TextBlock Text="FORMATTED OUTPUT PAYLOAD" FontSize="10" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" />
+              <TextBlock Text="{Binding FormattedOutput}" FontFamily="Consolas, monospace" FontSize="18" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

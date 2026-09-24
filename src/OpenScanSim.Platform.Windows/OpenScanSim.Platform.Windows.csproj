@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenScanSim.Common\OpenScanSim.Common.csproj" />
+    <ProjectReference Include="..\OpenScanSim.Core\OpenScanSim.Core.csproj" />
+  </ItemGroup>
+
+</Project>

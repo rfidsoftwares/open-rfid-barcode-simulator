@@ -1,0 +1,150 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Application Color Palette & Brushes -->
+  <Styles.Resources>
+    <!-- Backgrounds -->
+    <Color x:Key="BgDarkDeep">#090D16</Color>
+    <Color x:Key="BgDarkSidebar">#0F172A</Color>
+    <Color x:Key="BgCardDark">#141E33</Color>
+    <Color x:Key="BgCardHover">#1E293B</Color>
+    <Color x:Key="BgInputDark">#0D1322</Color>
+
+    <!-- Accents & Brands -->
+    <Color x:Key="BrandPrimary">#2563EB</Color>
+    <Color x:Key="BrandPrimaryHover">#3B82F6</Color>
+    <Color x:Key="BrandCyan">#04E8F4</Color>
+    <Color x:Key="AccentSuccess">#10B981</Color>
+    <Color x:Key="AccentWarning">#F59E0B</Color>
+    <Color x:Key="AccentDanger">#EF4444</Color>
+
+    <!-- Text & Borders -->
+    <Color x:Key="TextPrimary">#F8FAFC</Color>
+    <Color x:Key="TextSecondary">#94A3B8</Color>
+    <Color x:Key="TextMuted">#64748B</Color>
+    <Color x:Key="BorderSubtle">#1E293B</Color>
+    <Color x:Key="BorderLight">#334155</Color>
+
+    <SolidColorBrush x:Key="BgDarkDeepBrush" Color="{StaticResource BgDarkDeep}" />
+    <SolidColorBrush x:Key="BgDarkSidebarBrush" Color="{StaticResource BgDarkSidebar}" />
+    <SolidColorBrush x:Key="BgCardDarkBrush" Color="{StaticResource BgCardDark}" />
+    <SolidColorBrush x:Key="BgCardHoverBrush" Color="{StaticResource BgCardHover}" />
+    <SolidColorBrush x:Key="BgInputDarkBrush" Color="{StaticResource BgInputDark}" />
+
+    <SolidColorBrush x:Key="BrandPrimaryBrush" Color="{StaticResource BrandPrimary}" />
+    <SolidColorBrush x:Key="BrandPrimaryHoverBrush" Color="{StaticResource BrandPrimaryHover}" />
+    <SolidColorBrush x:Key="BrandCyanBrush" Color="{StaticResource BrandCyan}" />
+    <SolidColorBrush x:Key="AccentSuccessBrush" Color="{StaticResource AccentSuccess}" />
+    <SolidColorBrush x:Key="AccentWarningBrush" Color="{StaticResource AccentWarning}" />
+    <SolidColorBrush x:Key="AccentDangerBrush" Color="{StaticResource AccentDanger}" />
+
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimary}" />
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondary}" />
+    <SolidColorBrush x:Key="TextMutedBrush" Color="{StaticResource TextMuted}" />
+    <SolidColorBrush x:Key="BorderSubtleBrush" Color="{StaticResource BorderSubtle}" />
+    <SolidColorBrush x:Key="BorderLightBrush" Color="{StaticResource BorderLight}" />
+  </Styles.Resources>
+
+  <!-- Modern Card Style -->
+  <Style Selector="Border.Card">
+    <Setter Property="Background" Value="{StaticResource BgCardDarkBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderSubtleBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="16" />
+  </Style>
+
+  <!-- Glowing Primary Action Button -->
+  <Style Selector="Button.PrimaryBtn">
+    <Setter Property="Background" Value="{StaticResource BrandPrimaryBrush}" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Padding" Value="16,10" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.PrimaryBtn:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource BrandPrimaryHoverBrush}" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+
+  <!-- Success / Green Button -->
+  <Style Selector="Button.SuccessBtn">
+    <Setter Property="Background" Value="#059669" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Padding" Value="16,10" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.SuccessBtn:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#10B981" />
+  </Style>
+
+  <!-- Danger / Stop Button -->
+  <Style Selector="Button.DangerBtn">
+    <Setter Property="Background" Value="#DC2626" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Padding" Value="16,10" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.DangerBtn:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#EF4444" />
+  </Style>
+
+  <!-- Secondary / Ghost Button -->
+  <Style Selector="Button.GhostBtn">
+    <Setter Property="Background" Value="#1E293B" />
+    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderLightBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Padding" Value="14,8" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.GhostBtn:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#334155" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+
+  <!-- Navigation Rail Button -->
+  <Style Selector="Button.NavBtn">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="Padding" Value="12,10" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.NavBtn:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#1E293B" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Button.NavBtn.Active">
+    <Setter Property="Background" Value="#1D4ED8" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <!-- Code/Hex Display Box -->
+  <Style Selector="TextBox.CodeBox">
+    <Setter Property="FontFamily" Value="Consolas, Cascadia Code, Courier New, monospace" />
+    <Setter Property="Background" Value="{StaticResource BgInputDarkBrush}" />
+    <Setter Property="Foreground" Value="{StaticResource BrandCyanBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderLightBrush}" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Padding" Value="10,8" />
+  </Style>
+
+  <!-- Status Pill/Badge -->
+  <Style Selector="Border.Badge">
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Padding" Value="10,4" />
+  </Style>
+
+</Styles>

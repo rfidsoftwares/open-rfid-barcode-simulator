@@ -1,0 +1,177 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:OpenScanSim.UI.ViewModels"
+        xmlns:views="using:OpenScanSim.UI.Views"
+        x:Class="OpenScanSim.UI.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="OpenRFID &amp; Barcode Simulator - RFID Softwares"
+        Width="1200" Height="780"
+        MinWidth="960" MinHeight="640"
+        WindowStartupLocation="CenterScreen"
+        Topmost="{Binding IsAlwaysOnTop}"
+        Background="{StaticResource BgDarkDeepBrush}">
+
+  <Grid ColumnDefinitions="240,*">
+
+    <!-- Left Navigation Rail (Sidebar) -->
+    <Border Grid.Column="0" Background="{StaticResource BgDarkSidebarBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="0,0,1,0">
+      <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- App Brand Header -->
+        <StackPanel Grid.Row="0" Spacing="10" Margin="16,18,16,12">
+          <Grid ColumnDefinitions="Auto,*">
+            <Image Grid.Column="0" Source="/Assets/logo.png" Width="36" Height="36" Margin="0,0,10,0" />
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+              <TextBlock Text="OpenRFID" FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+              <TextBlock Text="&amp; Barcode Simulator" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource BrandCyanBrush}" />
+            </StackPanel>
+          </Grid>
+
+          <!-- Top Window Controls: Always on top & Compact HUD -->
+          <Grid ColumnDefinitions="*,*" Margin="0,4,0,0">
+            <!-- Pin Always On Top Toggle -->
+            <ToggleButton Grid.Column="0" IsChecked="{Binding IsAlwaysOnTop, Mode=TwoWay}"
+                          Classes="GhostBtn" ToolTip.Tip="Toggle Window Always On Top"
+                          Padding="6,4" Margin="0,0,4,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+              <StackPanel Orientation="Horizontal" Spacing="4">
+                <TextBlock Text="📌" FontSize="11" />
+                <TextBlock Text="Pin Top" FontSize="11" FontWeight="SemiBold" />
+              </StackPanel>
+            </ToggleButton>
+
+            <!-- Compact Floating HUD Launcher -->
+            <Button Grid.Column="1" Command="{Binding OpenFloatingHudCommand}"
+                    Classes="GhostBtn" ToolTip.Tip="Open Compact Floating HUD Widget"
+                    Padding="6,4" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+              <StackPanel Orientation="Horizontal" Spacing="4">
+                <TextBlock Text="🎛️" FontSize="11" />
+                <TextBlock Text="Mini HUD" FontSize="11" FontWeight="SemiBold" />
+              </StackPanel>
+            </Button>
+          </Grid>
+
+          <Border Height="1" Background="{StaticResource BorderSubtleBrush}" Margin="0,4,0,0" />
+        </StackPanel>
+
+        <!-- Navigation Buttons -->
+        <StackPanel Grid.Row="1" Spacing="6" Margin="12,4,12,0">
+          <!-- Dashboard Button -->
+          <Button Classes="NavBtn" Command="{Binding GoToDashboardCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock Text="📊" FontSize="16" />
+              <TextBlock Text="Dashboard" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+
+          <!-- Generator Button -->
+          <Button Classes="NavBtn" Command="{Binding GoToGeneratorCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock Text="⚡" FontSize="16" />
+              <TextBlock Text="Data Generator" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+
+          <!-- Timing Button -->
+          <Button Classes="NavBtn" Command="{Binding GoToTimingCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock Text="⏱️" FontSize="16" />
+              <TextBlock Text="Timing &amp; Wedge" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+
+          <!-- UHF Inspector Button -->
+          <Button Classes="NavBtn" Command="{Binding GoToInspectorCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock Text="🔍" FontSize="16" />
+              <TextBlock Text="UHF Tag Inspector" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+
+          <!-- Barcode Studio Button -->
+          <Button Classes="NavBtn" Command="{Binding GoToBarcodeStudioCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock Text="📷" FontSize="16" />
+              <TextBlock Text="Barcode Studio" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+
+          <!-- NFC NDEF Studio Button -->
+          <Button Classes="NavBtn" Command="{Binding GoToNdefStudioCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock Text="📱" FontSize="16" />
+              <TextBlock Text="NFC NDEF Studio" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+
+          <!-- Extended Studio Button -->
+          <Button Classes="NavBtn" Command="{Binding GoToExtendedStudioCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock Text="🛂" FontSize="16" />
+              <TextBlock Text="Extended Studio" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+
+          <!-- Telemetry Monitor Button -->
+          <Button Classes="NavBtn" Command="{Binding GoToTelemetryCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <TextBlock Text="📈" FontSize="16" />
+              <TextBlock Text="Telemetry Monitor" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+        </StackPanel>
+
+        <!-- Bottom Hotkey Cheatsheet & Sponsor Info -->
+        <Border Grid.Row="2" Background="{StaticResource BgCardDarkBrush}" CornerRadius="8" Margin="12,0,12,16" Padding="12">
+          <StackPanel Spacing="6">
+            <TextBlock Text="GLOBAL HOTKEYS" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
+              <TextBlock Grid.Row="0" Grid.Column="0" Text="F8:" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" Margin="0,0,6,2" />
+              <TextBlock Grid.Row="0" Grid.Column="1" Text="Start / Stop" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+
+              <TextBlock Grid.Row="1" Grid.Column="0" Text="F9:" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" Margin="0,0,6,2" />
+              <TextBlock Grid.Row="1" Grid.Column="1" Text="Pause / Resume" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+
+              <TextBlock Grid.Row="2" Grid.Column="0" Text="F10:" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" Margin="0,0,6,0" />
+              <TextBlock Grid.Row="2" Grid.Column="1" Text="Single Step" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" />
+            </Grid>
+
+            <Border Height="1" Background="{StaticResource BorderSubtleBrush}" Margin="0,4,0,4" />
+            <TextBlock Text="rfidsoftwares.com" FontSize="10" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center" />
+          </StackPanel>
+        </Border>
+
+      </Grid>
+    </Border>
+
+    <!-- Main Content Area -->
+    <ContentControl Grid.Column="1" Content="{Binding CurrentPage}">
+      <ContentControl.DataTemplates>
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+          <views:DashboardView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:GeneratorViewModel}">
+          <views:GeneratorView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TimingViewModel}">
+          <views:TimingView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:InspectorViewModel}">
+          <views:InspectorView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:BarcodeStudioViewModel}">
+          <views:BarcodeStudioView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:NdefStudioViewModel}">
+          <views:NdefStudioView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ExtendedStudioViewModel}">
+          <views:ExtendedStudioView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TelemetryViewModel}">
+          <views:TelemetryView />
+        </DataTemplate>
+      </ContentControl.DataTemplates>
+    </ContentControl>
+
+  </Grid>
+</Window>

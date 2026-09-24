@@ -1,0 +1,98 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:OpenScanSim.UI.ViewModels"
+             x:Class="OpenScanSim.UI.Views.NdefStudioView"
+             x:DataType="vm:NdefStudioViewModel">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="20" Margin="24">
+
+      <!-- Header -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="NFC Forum NDEF Studio" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+        <TextBlock Text="Synthesize binary NFC Data Exchange Format (NDEF) records for URIs, smart posters, and text payloads."
+                   FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" />
+      </StackPanel>
+
+      <!-- Record Type & Payload Card -->
+      <Border Classes="Card">
+        <StackPanel Spacing="16">
+          <TextBlock Text="NDEF RECORD CONFIGURATION" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+
+          <Grid ColumnDefinitions="*,*">
+            <RadioButton Grid.Column="0" Content="🌐 Well-Known URI Record (urn:nfc:wkt:U)"
+                         IsChecked="{Binding RecordTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"
+                         GroupName="NdefTypeGroup" Margin="0,0,12,0" />
+            <RadioButton Grid.Column="1" Content="📝 Well-Known Text Record (urn:nfc:wkt:T)"
+                         IsChecked="{Binding RecordTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}"
+                         GroupName="NdefTypeGroup" />
+          </Grid>
+
+          <!-- Dynamic Input Fields based on Type -->
+          <StackPanel Spacing="12">
+            <!-- URI Input -->
+            <StackPanel Spacing="6" IsVisible="{Binding RecordTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}">
+              <TextBlock Text="Target Web URL / URI:" FontWeight="Medium" Foreground="{StaticResource TextPrimaryBrush}" />
+              <TextBox Classes="CodeBox" Text="{Binding UriInput, Mode=TwoWay}" Watermark="https://rfidsoftwares.com/" />
+              <TextBlock Text="URI prefixes like https://www. or https:// are compressed into single-byte identifier codes."
+                         FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+            </StackPanel>
+
+            <!-- Text Input -->
+            <Grid ColumnDefinitions="*,120" IsVisible="{Binding RecordTypeIndex, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=1}">
+              <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,12,0">
+                <TextBlock Text="Text Payload:" FontWeight="Medium" Foreground="{StaticResource TextPrimaryBrush}" />
+                <TextBox Classes="CodeBox" Text="{Binding TextInput, Mode=TwoWay}" Watermark="Hello NFC" />
+              </StackPanel>
+              <StackPanel Grid.Column="1" Spacing="6">
+                <TextBlock Text="Language (ISO):" FontWeight="Medium" Foreground="{StaticResource TextPrimaryBrush}" />
+                <TextBox Classes="CodeBox" Text="{Binding LanguageCode, Mode=TwoWay}" Watermark="en" />
+              </StackPanel>
+            </Grid>
+          </StackPanel>
+
+        </StackPanel>
+      </Border>
+
+      <!-- Binary & Hex Byte Inspector Card -->
+      <Border Classes="Card">
+        <StackPanel Spacing="16">
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Grid.Column="0" Spacing="2">
+              <TextBlock Text="NDEF BINARY &amp; HEX ENCODING" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <TextBlock Text="{Binding ByteLength, StringFormat={}Total Length: {0} Bytes}" FontSize="12" Foreground="{StaticResource BrandCyanBrush}" />
+                <TextBlock Text="(MB=1, ME=1, SR=1, TNF=0x01)" FontSize="11" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" />
+              </StackPanel>
+            </StackPanel>
+
+            <!-- Inject Button -->
+            <Button Grid.Column="1" Classes="PrimaryBtn" Command="{Binding InjectNdefCommand}">
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <TextBlock Text="⚡" />
+                <TextBlock Text="INJECT NDEF SCAN" />
+              </StackPanel>
+            </Button>
+          </Grid>
+
+          <!-- Hex Output -->
+          <Border Background="{StaticResource BgInputDarkBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8" Padding="14">
+            <StackPanel Spacing="4">
+              <TextBlock Text="UPPERCASE HEX PAYLOAD" FontSize="10" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" />
+              <TextBlock Text="{Binding HexOutput}" FontFamily="Consolas, monospace" FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap" />
+            </StackPanel>
+          </Border>
+
+          <!-- Binary Byte Breakdown -->
+          <Border Background="{StaticResource BgInputDarkBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8" Padding="14">
+            <StackPanel Spacing="4">
+              <TextBlock Text="RAW BYTE ARRAY (HEX DUMP)" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" />
+              <TextBlock Text="{Binding BinaryRepresentation}" FontFamily="Consolas, monospace" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

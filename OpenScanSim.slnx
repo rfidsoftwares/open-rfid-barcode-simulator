@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/OpenScanSim.Common/OpenScanSim.Common.csproj" />
+    <Project Path="src/OpenScanSim.Core/OpenScanSim.Core.csproj" />
+    <Project Path="src/OpenScanSim.Platform.Windows/OpenScanSim.Platform.Windows.csproj" />
+    <Project Path="src/OpenScanSim.UI/OpenScanSim.UI.csproj" />
+    <Project Path="src/OpenScanSim.Cli/OpenScanSim.Cli.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OpenScanSim.UnitTests/OpenScanSim.UnitTests.csproj" />
+  </Folder>
+</Solution>

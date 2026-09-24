@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OpenRFID & Barcode Simulator - Live Web Wedge Testbed</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background-color: #0b0f19;
+      color: #f8fafc;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card {
+      background-color: #141e33;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 30px;
+      width: 600px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    h1 {
+      color: #2563eb;
+      margin-top: 0;
+      font-size: 24px;
+    }
+    .badge {
+      display: inline-block;
+      background-color: #10b981;
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      background-color: #0d1322;
+      border: 1.5px solid #334155;
+      border-radius: 8px;
+      color: #04e8f4;
+      font-family: 'Consolas', monospace;
+      font-size: 16px;
+      box-sizing: border-box;
+      outline: none;
+    }
+    input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+    }
+    .log-box {
+      margin-top: 20px;
+      background-color: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 14px;
+      height: 150px;
+      overflow-y: auto;
+      font-family: 'Consolas', monospace;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .log-item {
+      margin-bottom: 4px;
+    }
+    .log-item span {
+      color: #10b981;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">TESTBED ACTIVE</div>
+    <h1>OpenRFID Simulator Web Input Testbed</h1>
+    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">
+      Click the field below. The virtual keyboard wedge will inject simulated scans directly into this element.
+    </p>
+
+    <label for="scanInput" style="font-size: 12px; font-weight: bold; color: #64748b; text-transform: uppercase;">Active Scan Input Field:</label>
+    <input type="text" id="scanInput" placeholder="Click here and start simulator..." autofocus />
+
+    <div class="log-box" id="logBox">
+      <div class="log-item">System ready. Waiting for keyboard wedge injection...</div>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('scanInput');
+    const log = document.getElementById('logBox');
+    let scanCount = 0;
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        scanCount++;
+        const val = input.value.trim();
+        if (val) {
+          const item = document.createElement('div');
+          item.className = 'log-item';
+          item.innerHTML = `[${new Date().toLocaleTimeString()}] <span>Scan #${scanCount}:</span> ${val}`;
+          log.prepend(item);
+          input.value = '';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

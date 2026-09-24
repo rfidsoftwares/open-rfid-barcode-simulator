@@ -1,0 +1,99 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:OpenScanSim.UI.ViewModels"
+        x:Class="OpenScanSim.UI.Views.FloatingHudWindow"
+        x:DataType="vm:FloatingHudViewModel"
+        Title="OpenRFID Mini-HUD"
+        Width="350" Height="220"
+        CanResize="False"
+        Topmost="True"
+        SystemDecorations="None"
+        WindowStartupLocation="Manual"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent">
+
+  <!-- HUD Glassmorphic Container -->
+  <Border Background="#0D1322"
+          BorderBrush="{StaticResource BrandPrimaryBrush}"
+          BorderThickness="1.5"
+          CornerRadius="12"
+          BoxShadow="0 8 32 0 #80000000"
+          Padding="14">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+      <!-- Header & Drag Area -->
+      <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto" VerticalAlignment="Center">
+        <!-- Drag Handle / Logo -->
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <Image Source="/Assets/logo.png" Width="20" Height="20" />
+          <TextBlock Text="OpenRFID HUD" FontWeight="Bold" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center" />
+        </StackPanel>
+
+        <!-- Status Pill -->
+        <Border Grid.Column="1" Classes="Badge" Background="{Binding Dashboard.StatusBadgeColor}" HorizontalAlignment="Center" Padding="8,2">
+          <TextBlock Text="{Binding Dashboard.StatusBadgeText}" FontSize="10" FontWeight="Bold" Foreground="White" />
+        </Border>
+
+        <!-- Expand Button -->
+        <Button Grid.Column="2" Classes="GhostBtn" Command="{Binding OpenMainWindowCommand}" ToolTip.Tip="Open Full Dashboard" Padding="6,4" Margin="0,0,4,0">
+          <TextBlock Text="↗" FontSize="12" />
+        </Button>
+
+        <!-- Close / Hide Button -->
+        <Button Grid.Column="3" Classes="GhostBtn" Command="{Binding CloseHudCommand}" ToolTip.Tip="Close HUD" Padding="6,4">
+          <TextBlock Text="✕" FontSize="11" />
+        </Button>
+      </Grid>
+
+      <!-- Central Stats Grid & Payload -->
+      <StackPanel Grid.Row="1" Spacing="8" Margin="0,10,0,10">
+        <!-- Telemetry Gauges -->
+        <Grid ColumnDefinitions="*,*">
+          <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="6">
+            <TextBlock Text="Scanned:" FontSize="11" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding Dashboard.ProcessedCount}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" VerticalAlignment="Center" />
+            <TextBlock Text="/" FontSize="12" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding Dashboard.TotalCount}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" />
+          </StackPanel>
+
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right">
+            <TextBlock Text="Rate:" FontSize="11" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding Dashboard.CurrentTps, StringFormat={}{0:F1}}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource AccentSuccessBrush}" VerticalAlignment="Center" />
+            <TextBlock Text="TPS" FontSize="10" Foreground="{StaticResource AccentSuccessBrush}" VerticalAlignment="Center" />
+          </StackPanel>
+        </Grid>
+
+        <!-- Progress Bar -->
+        <ProgressBar Value="{Binding Dashboard.ProgressPercent}" Maximum="100" Height="4" CornerRadius="2" Background="#1E293B" Foreground="{StaticResource BrandPrimaryBrush}" />
+
+        <!-- Live Payload Stream -->
+        <TextBox Classes="CodeBox" Text="{Binding Dashboard.LastPayload}" IsReadOnly="True" FontSize="12" Height="30" Padding="6,4" VerticalContentAlignment="Center" />
+      </StackPanel>
+
+      <!-- Action Button Controls -->
+      <Grid Grid.Row="2" ColumnDefinitions="*,*,*,*">
+        <!-- Start Button -->
+        <Button Grid.Column="0" Classes="SuccessBtn" Command="{Binding Dashboard.StartSimulationCommand}" Padding="0,6" Margin="0,0,4,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+          <TextBlock Text="▶ F8" FontSize="11" FontWeight="Bold" />
+        </Button>
+
+        <!-- Pause / Resume Button -->
+        <Button Grid.Column="1" Classes="GhostBtn" Command="{Binding Dashboard.PauseSimulationCommand}" Padding="0,6" Margin="0,0,4,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+          <TextBlock Text="⏸ F9" FontSize="11" FontWeight="Bold" />
+        </Button>
+
+        <!-- Step Button -->
+        <Button Grid.Column="2" Classes="GhostBtn" Command="{Binding Dashboard.TriggerSingleStepCommand}" Padding="0,6" Margin="0,0,4,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+          <TextBlock Text="⏭ F10" FontSize="11" FontWeight="Bold" />
+        </Button>
+
+        <!-- Stop Button -->
+        <Button Grid.Column="3" Classes="DangerBtn" Command="{Binding Dashboard.StopSimulationCommand}" Padding="0,6" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+          <TextBlock Text="⏹ STOP" FontSize="11" FontWeight="Bold" />
+        </Button>
+      </Grid>
+
+    </Grid>
+  </Border>
+</Window>

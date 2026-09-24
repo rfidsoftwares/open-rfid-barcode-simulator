@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>13.0</LangVersion>
+    <AssemblyName>openscansim</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenScanSim.Common\OpenScanSim.Common.csproj" />
+    <ProjectReference Include="..\OpenScanSim.Core\OpenScanSim.Core.csproj" />
+    <ProjectReference Include="..\OpenScanSim.Platform.Windows\OpenScanSim.Platform.Windows.csproj" />
+  </ItemGroup>
+</Project>

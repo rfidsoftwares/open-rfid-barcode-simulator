@@ -1,0 +1,99 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:OpenScanSim.UI.ViewModels"
+             x:Class="OpenScanSim.UI.Views.TelemetryView"
+             x:DataType="vm:TelemetryViewModel">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="20" Margin="24">
+
+      <!-- Header -->
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Grid.Column="0" Spacing="4">
+          <TextBlock Text="Live Telemetry &amp; Audit Monitor" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+          <TextBlock Text="Real-time transmission throughput, peak TPS tracking, and chronological scan audit logs."
+                     FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" />
+        </StackPanel>
+
+        <!-- Actions -->
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <Button Classes="GhostBtn" Command="{Binding ClearAuditTrailCommand}">
+            <TextBlock Text="🗑️ Clear Trail" FontSize="12" />
+          </Button>
+          <Button Classes="GhostBtn" Command="{Binding ExportAuditTrailCsvCommand}">
+            <TextBlock Text="📥 Export CSV" FontSize="12" />
+          </Button>
+        </StackPanel>
+      </Grid>
+
+      <!-- Real-Time Metrics Cards -->
+      <Grid ColumnDefinitions="*,*,*,*">
+        <!-- Current TPS -->
+        <Border Grid.Column="0" Classes="Card" Margin="0,0,12,0">
+          <StackPanel Spacing="4">
+            <TextBlock Text="CURRENT THROUGHPUT" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" />
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="{Binding CurrentTps, StringFormat={}{0:F1}}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource AccentSuccessBrush}" />
+              <TextBlock Text="TPS" FontSize="14" FontWeight="Bold" Foreground="{StaticResource AccentSuccessBrush}" VerticalAlignment="Bottom" Margin="0,0,0,4" />
+            </StackPanel>
+            <TextBlock Text="Instantaneous scan rate" FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+          </StackPanel>
+        </Border>
+
+        <!-- Peak TPS -->
+        <Border Grid.Column="1" Classes="Card" Margin="0,0,12,0">
+          <StackPanel Spacing="4">
+            <TextBlock Text="PEAK THROUGHPUT" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" />
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="{Binding PeakTpsDisplay, StringFormat={}{0:F1}}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" />
+              <TextBlock Text="TPS" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" VerticalAlignment="Bottom" Margin="0,0,0,4" />
+            </StackPanel>
+            <TextBlock Text="Max burst rate achieved" FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+          </StackPanel>
+        </Border>
+
+        <!-- Total Transmitted -->
+        <Border Grid.Column="2" Classes="Card" Margin="0,0,12,0">
+          <StackPanel Spacing="4">
+            <TextBlock Text="TOTAL TRANSMITTED" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" />
+            <TextBlock Text="{Binding TotalTransmitted}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource BrandPrimaryHoverBrush}" />
+            <TextBlock Text="Session verified scans" FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+          </StackPanel>
+        </Border>
+
+        <!-- Engine Status -->
+        <Border Grid.Column="3" Classes="Card">
+          <StackPanel Spacing="4">
+            <TextBlock Text="WEDGE ENGINE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" />
+            <TextBlock Text="{Binding SessionStateText}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+            <TextBlock Text="Windows SendInput Active" FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+          </StackPanel>
+        </Border>
+      </Grid>
+
+      <!-- Chronological Audit Feed -->
+      <Border Classes="Card">
+        <StackPanel Spacing="12">
+          <TextBlock Text="CHRONOLOGICAL TRANSMISSION AUDIT TRAIL" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+
+          <ListBox ItemsSource="{Binding TransmissionAuditTrail}" Height="340" Background="{StaticResource BgInputDarkBrush}" CornerRadius="6" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <Grid ColumnDefinitions="90,70,120,*,Auto" Margin="0,3">
+                  <TextBlock Grid.Column="0" Text="{Binding Timestamp, StringFormat={}{0:HH:mm:ss.fff}}" FontFamily="Consolas, monospace" FontSize="11" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" />
+                  <TextBlock Grid.Column="1" Text="{Binding SequenceIndex, StringFormat={}#{0}}" FontFamily="Consolas, monospace" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" VerticalAlignment="Center" />
+                  <Border Grid.Column="2" Classes="Badge" Background="#1E293B" HorizontalAlignment="Left" Padding="6,2">
+                    <TextBlock Text="{Binding ReaderType}" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" />
+                  </Border>
+                  <TextBlock Grid.Column="3" Text="{Binding PrimaryPayload}" FontFamily="Consolas, monospace" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Grid.Column="4" Text="{Binding ProtocolControlWord, StringFormat={}PC: {0}}" FontFamily="Consolas, monospace" FontSize="11" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

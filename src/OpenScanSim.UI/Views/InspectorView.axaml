@@ -1,0 +1,123 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:OpenScanSim.UI.ViewModels"
+             x:Class="OpenScanSim.UI.Views.InspectorView"
+             x:DataType="vm:InspectorViewModel">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="20" Margin="24">
+
+      <!-- Header -->
+      <StackPanel Spacing="4">
+        <TextBlock Text="UHF Gen2 Tag &amp; GS1 Inspector" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+        <TextBlock Text="Inspect and calculate EPC Gen2 4-bank memory layouts, SGTIN-96 partition tables, and CRC-16 checksums."
+                   FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" />
+      </StackPanel>
+
+      <!-- GS1 SGTIN-96 Calculator Card -->
+      <Border Classes="Card">
+        <StackPanel Spacing="16">
+          <TextBlock Text="GS1 SGTIN-96 ENCODING CALCULATOR" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+
+          <Grid ColumnDefinitions="*,*,*,*">
+            <!-- Filter Value -->
+            <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,12,0">
+              <TextBlock Text="Filter Value (0-7):" Foreground="{StaticResource TextPrimaryBrush}" />
+              <NumericUpDown Value="{Binding FilterValue}" Minimum="0" Maximum="7" />
+            </StackPanel>
+
+            <!-- Partition -->
+            <StackPanel Grid.Column="1" Spacing="6" Margin="0,0,12,0">
+              <TextBlock Text="Partition (0-6):" Foreground="{StaticResource TextPrimaryBrush}" />
+              <NumericUpDown Value="{Binding Partition}" Minimum="0" Maximum="6" />
+            </StackPanel>
+
+            <!-- Company Prefix -->
+            <StackPanel Grid.Column="2" Spacing="6" Margin="0,0,12,0">
+              <TextBlock Text="Company Prefix (GS1):" Foreground="{StaticResource TextPrimaryBrush}" />
+              <NumericUpDown Value="{Binding CompanyPrefix}" Minimum="1" Maximum="999999999999" />
+            </StackPanel>
+
+            <!-- Item Reference -->
+            <StackPanel Grid.Column="3" Spacing="6">
+              <TextBlock Text="Item Reference:" Foreground="{StaticResource TextPrimaryBrush}" />
+              <NumericUpDown Value="{Binding ItemReference}" Minimum="0" Maximum="9999999" />
+            </StackPanel>
+          </Grid>
+
+          <!-- Serial Number & Recalculate Button -->
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,16,0">
+              <TextBlock Text="Serial Number (up to 38 bits / 274B):" Foreground="{StaticResource TextPrimaryBrush}" />
+              <NumericUpDown Value="{Binding SerialNumber}" Minimum="0" Maximum="274877906943" />
+            </StackPanel>
+
+            <Button Grid.Column="1" Classes="PrimaryBtn" Command="{Binding CalculateTagCommand}" VerticalAlignment="Bottom" Height="36">
+              <TextBlock Text="RECALCULATE ENCODING" />
+            </Button>
+          </Grid>
+
+          <!-- Computed EPC Output -->
+          <Border Background="{StaticResource BgInputDarkBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8" Padding="14">
+            <Grid ColumnDefinitions="*,*,*">
+              <StackPanel Grid.Column="0" Spacing="2" Margin="0,0,12,0">
+                <TextBlock Text="COMPUTED EPC (96-BIT HEX)" FontSize="10" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" />
+                <TextBlock Text="{Binding CalculatedEpcHex}" FontFamily="Consolas, monospace" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+              </StackPanel>
+
+              <StackPanel Grid.Column="1" Spacing="2" Margin="0,0,12,0">
+                <TextBlock Text="PROTOCOL CONTROL (PC)" FontSize="10" FontWeight="Bold" Foreground="{StaticResource BrandPrimaryHoverBrush}" />
+                <TextBlock Text="{Binding CalculatedPcWord}" FontFamily="Consolas, monospace" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+              </StackPanel>
+
+              <StackPanel Grid.Column="2" Spacing="2">
+                <TextBlock Text="CRC-16 / CCITT" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AccentSuccessBrush}" />
+                <TextBlock Text="{Binding CalculatedCrc16}" FontFamily="Consolas, monospace" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+              </StackPanel>
+            </Grid>
+          </Border>
+        </StackPanel>
+      </Border>
+
+      <!-- 4-Bank Memory Structure Card -->
+      <Border Classes="Card">
+        <StackPanel Spacing="16">
+          <TextBlock Text="EPC GEN2 4-BANK MEMORY ARCHITECTURE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+
+          <!-- Bank 00 -->
+          <Border Background="{StaticResource BgInputDarkBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8" Padding="12">
+            <StackPanel Spacing="4">
+              <TextBlock Text="BANK 00: RESERVED MEMORY (Kill PWD: Words 0-1, Access PWD: Words 2-3)" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextSecondaryBrush}" />
+              <TextBlock Text="{Binding Bank00ReservedHex}" FontFamily="Consolas, monospace" FontSize="13" Foreground="{StaticResource TextMutedBrush}" />
+            </StackPanel>
+          </Border>
+
+          <!-- Bank 01 -->
+          <Border Background="{StaticResource BgInputDarkBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8" Padding="12">
+            <StackPanel Spacing="4">
+              <TextBlock Text="BANK 01: EPC MEMORY (CRC-16: Word 0 | PC: Word 1 | EPC: Words 2-7)" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" />
+              <TextBlock Text="{Binding Bank01EpcHex}" FontFamily="Consolas, monospace" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" />
+            </StackPanel>
+          </Border>
+
+          <!-- Bank 10 -->
+          <Border Background="{StaticResource BgInputDarkBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8" Padding="12">
+            <StackPanel Spacing="4">
+              <TextBlock Text="BANK 10: TID MEMORY (Factory Read-Only Chip Identifier)" FontSize="11" FontWeight="Bold" Foreground="{StaticResource BrandPrimaryHoverBrush}" />
+              <TextBlock Text="{Binding Bank10TidHex}" FontFamily="Consolas, monospace" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" />
+            </StackPanel>
+          </Border>
+
+          <!-- Bank 11 -->
+          <Border Background="{StaticResource BgInputDarkBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8" Padding="12">
+            <StackPanel Spacing="4">
+              <TextBlock Text="BANK 11: USER MEMORY (Optional Extended Data Storage)" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextSecondaryBrush}" />
+              <TextBlock Text="{Binding Bank11UserHex}" FontFamily="Consolas, monospace" FontSize="13" Foreground="{StaticResource TextMutedBrush}" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

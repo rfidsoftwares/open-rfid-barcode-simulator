@@ -1,0 +1,56 @@
+## ----------------------------------------------------------------------
+## .NET / C# Build & Compiler Artifacts
+## ----------------------------------------------------------------------
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+[Tt]est[Rr]esult*/
+
+# Visual Studio Cache & User Settings
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# Visual Studio Code & JetBrains Rider
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.ide/
+
+# Build Output & Single-File Publish directories
+# (Keep source code clean; standalone binaries are generated into publish/)
+publish/
+[Aa]rtifacts/
+
+# NuGet Packages & Caches
+*.nupkg
+*.snupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Crash Dumps & Profiling
+*.dmp
+*.mdmp
+*.crash
+*.prof
+*.coverage
+*.coveragexml
+
+# Temporary & OS Artifacts
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+scratch/

@@ -1,0 +1,218 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:OpenScanSim.UI.ViewModels"
+             xmlns:enums="using:OpenScanSim.Common.Enums"
+             x:Class="OpenScanSim.UI.Views.ExtendedStudioView"
+             x:DataType="vm:ExtendedStudioViewModel">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="20" Margin="24">
+
+      <!-- Header Banner -->
+      <Border Background="#101726" CornerRadius="12" Padding="20" BorderBrush="#1E293B" BorderThickness="1">
+        <Grid ColumnDefinitions="*,Auto">
+          <StackPanel Grid.Column="0" Spacing="6">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Border Background="#2563EB" CornerRadius="4" Padding="6,2">
+                <TextBlock Text="EXTENDED SUITE" FontSize="11" FontWeight="Bold" Foreground="White" />
+              </Border>
+              <Border Background="#064E3B" CornerRadius="4" Padding="6,2">
+                <TextBlock Text="ICAO 9303 • SCALES • BLE" FontSize="11" FontWeight="Bold" Foreground="#34D399" />
+              </Border>
+            </StackPanel>
+            <TextBlock Text="Extended Auto-ID &amp; Sensor Studio" FontSize="20" FontWeight="Bold" Foreground="#F8FAFC" />
+            <TextBlock Text="Emulate ICAO Passport Machine Readable Zones (MRZ), continuous industrial scale weight streams, and BLE beacon frames." FontSize="13" Foreground="#94A3B8" />
+          </StackPanel>
+
+          <Border Grid.Column="1" VerticalAlignment="Center" Background="#090D16" CornerRadius="8" Padding="12,8" BorderBrush="#334155" BorderThickness="1">
+            <TextBlock Text="{Binding StatusFeedback}" FontSize="12" Foreground="#04E8F4" FontWeight="SemiBold" />
+          </Border>
+        </Grid>
+      </Border>
+
+      <!-- Main Tabbed Workstation -->
+      <TabControl SelectedIndex="{Binding SelectedTabIndex}" Background="Transparent">
+
+        <!-- Tab 1: ICAO Passport MRZ -->
+        <TabItem Header="🛂 ICAO Passport MRZ">
+          <StackPanel Spacing="16" Margin="0,16,0,0">
+            <Border Background="#141E33" CornerRadius="10" Padding="20" BorderBrush="#1E293B" BorderThickness="1">
+              <StackPanel Spacing="16">
+                <TextBlock Text="ICAO Doc 9303 TD3 Passport Specification" FontSize="15" FontWeight="Bold" Foreground="#38BDF8" />
+                
+                <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto,Auto" Margin="0,4,0,0">
+                  <StackPanel Grid.Row="0" Grid.Column="0" Spacing="4" Margin="0,0,10,12">
+                    <TextBlock Text="Issuing Country (3-letter)" FontSize="12" Foreground="#94A3B8" />
+                    <TextBox Text="{Binding PassportCountry, Mode=TwoWay}" MaxLength="3" />
+                  </StackPanel>
+                  <StackPanel Grid.Row="0" Grid.Column="1" Spacing="4" Margin="0,0,10,12">
+                    <TextBlock Text="Nationality (3-letter)" FontSize="12" Foreground="#94A3B8" />
+                    <TextBox Text="{Binding PassportNationality, Mode=TwoWay}" MaxLength="3" />
+                  </StackPanel>
+                  <StackPanel Grid.Row="0" Grid.Column="2" Spacing="4" Margin="0,0,0,12">
+                    <TextBlock Text="Document Number" FontSize="12" Foreground="#94A3B8" />
+                    <TextBox Text="{Binding PassportDocNumber, Mode=TwoWay}" />
+                  </StackPanel>
+
+                  <StackPanel Grid.Row="1" Grid.Column="0" Spacing="4" Margin="0,0,10,12">
+                    <TextBlock Text="Primary Surname" FontSize="12" Foreground="#94A3B8" />
+                    <TextBox Text="{Binding PassportSurname, Mode=TwoWay}" />
+                  </StackPanel>
+                  <StackPanel Grid.Row="1" Grid.Column="1" Spacing="4" Margin="0,0,10,12">
+                    <TextBlock Text="Given Names" FontSize="12" Foreground="#94A3B8" />
+                    <TextBox Text="{Binding PassportGivenNames, Mode=TwoWay}" />
+                  </StackPanel>
+                  <StackPanel Grid.Row="1" Grid.Column="2" Spacing="4" Margin="0,0,0,12">
+                    <TextBlock Text="Sex (M / F / &lt;)" FontSize="12" Foreground="#94A3B8" />
+                    <TextBox Text="{Binding PassportSex, Mode=TwoWay}" MaxLength="1" />
+                  </StackPanel>
+
+                  <StackPanel Grid.Row="2" Grid.Column="0" Spacing="4" Margin="0,0,10,0">
+                    <TextBlock Text="Date of Birth" FontSize="12" Foreground="#94A3B8" />
+                    <DatePicker SelectedDate="{Binding PassportDob, Mode=TwoWay}" />
+                  </StackPanel>
+                  <StackPanel Grid.Row="2" Grid.Column="1" Spacing="4" Margin="0,0,10,0">
+                    <TextBlock Text="Expiry Date" FontSize="12" Foreground="#94A3B8" />
+                    <DatePicker SelectedDate="{Binding PassportExpiry, Mode=TwoWay}" />
+                  </StackPanel>
+                  <StackPanel Grid.Row="2" Grid.Column="2" Spacing="4">
+                    <TextBlock Text="Personal / National ID #" FontSize="12" Foreground="#94A3B8" />
+                    <TextBox Text="{Binding PassportPersonalNumber, Mode=TwoWay}" />
+                  </StackPanel>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <!-- MRZ Visual Preview -->
+            <Border Background="#090D16" CornerRadius="10" Padding="18" BorderBrush="#2563EB" BorderThickness="1.5">
+              <StackPanel Spacing="10">
+                <TextBlock Text="Live Computed Optical MRZ (2 Lines x 44 Chars):" FontSize="12" FontWeight="Bold" Foreground="#38BDF8" />
+                <Border Background="#030712" CornerRadius="6" Padding="14" BorderBrush="#1E293B" BorderThickness="1">
+                  <StackPanel Spacing="4">
+                    <TextBlock Text="{Binding MrzLine1}" FontFamily="Consolas, monospace" FontSize="15" Foreground="#04E8F4" FontWeight="Bold" />
+                    <TextBlock Text="{Binding MrzLine2}" FontFamily="Consolas, monospace" FontSize="15" Foreground="#10B981" FontWeight="Bold" />
+                  </StackPanel>
+                </Border>
+                <Button Content="⚡ INJECT PASSPORT MRZ TO ACTIVE CURSOR"
+                        Command="{Binding InjectMrzScanCommand}"
+                        Classes="Primary"
+                        HorizontalAlignment="Right"
+                        Padding="16,10" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </TabItem>
+
+        <!-- Tab 2: Industrial Digital Scale Wedge -->
+        <TabItem Header="⚖️ Digital Scale Wedge">
+          <StackPanel Spacing="16" Margin="0,16,0,0">
+            <Border Background="#141E33" CornerRadius="10" Padding="20" BorderBrush="#1E293B" BorderThickness="1">
+              <StackPanel Spacing="16">
+                <TextBlock Text="Industrial Serial &amp; USB Scale Output Emulation" FontSize="15" FontWeight="Bold" Foreground="#38BDF8" />
+
+                <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" Margin="0,4,0,0">
+                  <StackPanel Grid.Row="0" Grid.Column="0" Spacing="4" Margin="0,0,10,12">
+                    <TextBlock Text="Scale Protocol Standard:" FontSize="12" Foreground="#94A3B8" />
+                    <ComboBox SelectedItem="{Binding SelectedScaleProtocol}" HorizontalAlignment="Stretch">
+                      <enums:DigitalScaleProtocol>MettlerToledoContinuous</enums:DigitalScaleProtocol>
+                      <enums:DigitalScaleProtocol>CasStandard</enums:DigitalScaleProtocol>
+                      <enums:DigitalScaleProtocol>AveryBerkel</enums:DigitalScaleProtocol>
+                      <enums:DigitalScaleProtocol>NciGeneral</enums:DigitalScaleProtocol>
+                    </ComboBox>
+                  </StackPanel>
+                  <StackPanel Grid.Row="0" Grid.Column="1" Spacing="4" Margin="0,0,10,12">
+                    <TextBlock Text="Live Weight Value" FontSize="12" Foreground="#94A3B8" />
+                    <NumericUpDown Value="{Binding ScaleWeight, Mode=TwoWay}" Increment="0.1" Minimum="0" Maximum="9999" />
+                  </StackPanel>
+                  <StackPanel Grid.Row="0" Grid.Column="2" Spacing="4" Margin="0,0,0,12">
+                    <TextBlock Text="Tare Weight" FontSize="12" Foreground="#94A3B8" />
+                    <NumericUpDown Value="{Binding ScaleTare, Mode=TwoWay}" Increment="0.1" Minimum="0" Maximum="999" />
+                  </StackPanel>
+
+                  <StackPanel Grid.Row="1" Grid.Column="0" Spacing="4" Margin="0,0,10,0">
+                    <TextBlock Text="Weight Unit (kg / lb)" FontSize="12" Foreground="#94A3B8" />
+                    <TextBox Text="{Binding ScaleUnit, Mode=TwoWay}" />
+                  </StackPanel>
+                  <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,14,10,0">
+                    <CheckBox IsChecked="{Binding IsScaleStable, Mode=TwoWay}" Content="Weight Reading Stable" />
+                  </StackPanel>
+                  <StackPanel Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Margin="0,14,0,0">
+                    <CheckBox IsChecked="{Binding IsScaleGross, Mode=TwoWay}" Content="Gross Mode (Un-tared)" />
+                  </StackPanel>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <!-- Scale Formatted Output -->
+            <Border Background="#090D16" CornerRadius="10" Padding="18" BorderBrush="#2563EB" BorderThickness="1.5">
+              <StackPanel Spacing="10">
+                <TextBlock Text="Raw Serial/HID Scale Protocol Frame Output:" FontSize="12" FontWeight="Bold" Foreground="#38BDF8" />
+                <Border Background="#030712" CornerRadius="6" Padding="14" BorderBrush="#1E293B" BorderThickness="1">
+                  <TextBlock Text="{Binding ScaleFormattedOutput}" FontFamily="Consolas, monospace" FontSize="16" Foreground="#F59E0B" FontWeight="Bold" />
+                </Border>
+                <Button Content="⚡ INJECT SCALE READING TO ACTIVE CURSOR"
+                        Command="{Binding InjectScaleScanCommand}"
+                        Classes="Primary"
+                        HorizontalAlignment="Right"
+                        Padding="16,10" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </TabItem>
+
+        <!-- Tab 3: BLE Beacons -->
+        <TabItem Header="📡 BLE Beacons (iBeacon &amp; Eddystone)">
+          <StackPanel Spacing="16" Margin="0,16,0,0">
+            <Border Background="#141E33" CornerRadius="10" Padding="20" BorderBrush="#1E293B" BorderThickness="1">
+              <StackPanel Spacing="16">
+                <TextBlock Text="Apple iBeacon &amp; Google Eddystone Frame Synthesizer" FontSize="15" FontWeight="Bold" Foreground="#38BDF8" />
+
+                <Grid ColumnDefinitions="2*,*,*,*" Margin="0,4,0,0">
+                  <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
+                    <TextBlock Text="Proximity UUID" FontSize="12" Foreground="#94A3B8" />
+                    <TextBox Text="{Binding BeaconUuid, Mode=TwoWay}" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="4" Margin="0,0,10,0">
+                    <TextBlock Text="Major (0-65535)" FontSize="12" Foreground="#94A3B8" />
+                    <NumericUpDown Value="{Binding BeaconMajor, Mode=TwoWay}" Minimum="0" Maximum="65535" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="2" Spacing="4" Margin="0,0,10,0">
+                    <TextBlock Text="Minor (0-65535)" FontSize="12" Foreground="#94A3B8" />
+                    <NumericUpDown Value="{Binding BeaconMinor, Mode=TwoWay}" Minimum="0" Maximum="65535" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="3" Spacing="4">
+                    <TextBlock Text="Tx Power @ 1m (dBm)" FontSize="12" Foreground="#94A3B8" />
+                    <NumericUpDown Value="{Binding BeaconTxPower, Mode=TwoWay}" Minimum="-100" Maximum="20" />
+                  </StackPanel>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <!-- Beacon Frame Preview -->
+            <Border Background="#090D16" CornerRadius="10" Padding="18" BorderBrush="#2563EB" BorderThickness="1.5">
+              <StackPanel Spacing="12">
+                <TextBlock Text="Synthesized Apple iBeacon Raw Adv PDU (Hex):" FontSize="12" FontWeight="Bold" Foreground="#38BDF8" />
+                <Border Background="#030712" CornerRadius="6" Padding="12" BorderBrush="#1E293B" BorderThickness="1">
+                  <TextBlock Text="{Binding BeaconHexOutput}" FontFamily="Consolas, monospace" FontSize="14" Foreground="#04E8F4" TextWrapping="Wrap" />
+                </Border>
+
+                <TextBlock Text="Synthesized Google Eddystone-URL PDU (Hex):" FontSize="12" FontWeight="Bold" Foreground="#38BDF8" />
+                <Border Background="#030712" CornerRadius="6" Padding="12" BorderBrush="#1E293B" BorderThickness="1">
+                  <TextBlock Text="{Binding EddystoneHexOutput}" FontFamily="Consolas, monospace" FontSize="14" Foreground="#10B981" TextWrapping="Wrap" />
+                </Border>
+
+                <Button Content="⚡ INJECT BEACON PAYLOAD TO ACTIVE CURSOR"
+                        Command="{Binding InjectBeaconScanCommand}"
+                        Classes="Primary"
+                        HorizontalAlignment="Right"
+                        Padding="16,10" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </TabItem>
+
+      </TabControl>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

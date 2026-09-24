@@ -1,0 +1,203 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:OpenScanSim.UI.ViewModels"
+             xmlns:enums="using:OpenScanSim.Common.Enums"
+             x:Class="OpenScanSim.UI.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="16" Margin="24">
+
+      <!-- Top Header & Primary Action Controls -->
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Grid.Column="0" Spacing="4">
+          <TextBlock Text="Simulator Dashboard" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+          <TextBlock Text="Simulate hardware barcode scanners, UHF RFID portals, and NFC taps via virtual keyboard wedge."
+                     FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" />
+        </StackPanel>
+
+        <!-- Live Status Badge -->
+        <Border Grid.Column="1" Classes="Badge" Background="{Binding StatusBadgeColor}" VerticalAlignment="Center">
+          <TextBlock Text="{Binding StatusBadgeText}" FontWeight="Bold" FontSize="12" Foreground="White" />
+        </Border>
+      </Grid>
+
+      <!-- Protocol / Reader Type Selection Cards -->
+      <Border Classes="Card">
+        <StackPanel Spacing="12">
+          <TextBlock Text="SELECT SIMULATION HARDWARE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+          <Grid ColumnDefinitions="*,*,*,*">
+            <!-- UHF RFID -->
+            <RadioButton Grid.Column="0" Content="📡 UHF EPC Gen2"
+                         IsChecked="{Binding IsUhfSelected, Mode=TwoWay}"
+                         GroupName="ReaderTypeGroup" Margin="0,0,8,0" />
+            <!-- Barcode 1D/2D -->
+            <RadioButton Grid.Column="1" Content="📷 1D / 2D Barcode"
+                         IsChecked="{Binding IsBarcodeSelected, Mode=TwoWay}"
+                         GroupName="ReaderTypeGroup" Margin="0,0,8,0" />
+            <!-- HF RFID -->
+            <RadioButton Grid.Column="2" Content="🏷️ HF 13.56 MHz (ISO 15693)"
+                         IsChecked="{Binding IsHfSelected, Mode=TwoWay}"
+                         GroupName="ReaderTypeGroup" Margin="0,0,8,0" />
+            <!-- NFC -->
+            <RadioButton Grid.Column="3" Content="📱 NFC NDEF (ISO 14443A)"
+                         IsChecked="{Binding IsNfcSelected, Mode=TwoWay}"
+                         GroupName="ReaderTypeGroup" />
+          </Grid>
+        </StackPanel>
+      </Border>
+
+      <!-- Active Queue, Pattern & Timing Summary Card -->
+      <Border Classes="Card" Background="#0C1322" BorderBrush="#1E293B" Padding="14">
+        <Grid ColumnDefinitions="*,*,*">
+          <StackPanel Grid.Column="0" Spacing="4">
+            <TextBlock Text="PATTERN / MASK (⚡ Generator Tab)" FontSize="10" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" />
+            <TextBlock Text="{Binding Generator.MaskPattern}" FontFamily="Consolas, monospace" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" />
+          </StackPanel>
+          <StackPanel Grid.Column="1" Spacing="4">
+            <TextBlock Text="COUNTDOWN &amp; QUEUE INTERVAL (⏱️ Timing Tab)" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AccentWarningBrush}" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBlock Text="Start:" FontSize="12" Foreground="{StaticResource TextMutedBrush}" />
+              <TextBlock Text="{Binding Timing.StartCountdownSeconds, StringFormat={}{0:F1}s}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" />
+              <TextBlock Text="•" Foreground="{StaticResource TextMutedBrush}" />
+              <TextBlock Text="Interval:" FontSize="12" Foreground="{StaticResource TextMutedBrush}" />
+              <TextBlock Text="{Binding Timing.IntervalSeconds, StringFormat={}{0:F1}s}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" />
+            </StackPanel>
+          </StackPanel>
+          <StackPanel Grid.Column="2" Spacing="4">
+            <TextBlock Text="QUEUE BATCH SIZE &amp; MODE" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AccentSuccessBrush}" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBlock Text="{Binding Generator.TotalCount, StringFormat={}{0:N0} scans}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" />
+              <TextBlock Text="•" Foreground="{StaticResource TextMutedBrush}" />
+              <TextBlock Text="{Binding Timing.Mode}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" />
+            </StackPanel>
+          </StackPanel>
+        </Grid>
+      </Border>
+
+      <!-- Live Telemetry Stats Grid -->
+      <Grid ColumnDefinitions="*,*,*,*">
+        <!-- Processed Count -->
+        <Border Grid.Column="0" Classes="Card" Margin="0,0,12,0">
+          <StackPanel Spacing="4">
+            <TextBlock Text="TRANSMITTED" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" />
+            <TextBlock Text="{Binding ProcessedCount}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource BrandCyanBrush}" />
+            <TextBlock Text="Total scans delivered" FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+          </StackPanel>
+        </Border>
+
+        <!-- Total Target Count -->
+        <Border Grid.Column="1" Classes="Card" Margin="0,0,12,0">
+          <StackPanel Spacing="4">
+            <TextBlock Text="TARGET BATCH" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" />
+            <TextBlock Text="{Binding TotalCount}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" />
+            <TextBlock Text="Configured payload total" FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+          </StackPanel>
+        </Border>
+
+        <!-- Throughput TPS -->
+        <Border Grid.Column="2" Classes="Card" Margin="0,0,12,0">
+          <StackPanel Spacing="4">
+            <TextBlock Text="THROUGHPUT" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" />
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="{Binding CurrentTps, StringFormat={}{0:F1}}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource AccentSuccessBrush}" />
+              <TextBlock Text="TPS" FontSize="14" FontWeight="Bold" Foreground="{StaticResource AccentSuccessBrush}" VerticalAlignment="Bottom" Margin="0,0,0,4" />
+            </StackPanel>
+            <TextBlock Text="Real-time tags per sec" FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+          </StackPanel>
+        </Border>
+
+        <!-- Progress Percentage -->
+        <Border Grid.Column="3" Classes="Card">
+          <StackPanel Spacing="4">
+            <TextBlock Text="PROGRESS" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" />
+            <TextBlock Text="{Binding ProgressPercent, StringFormat={}{0:F0}%}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource BrandPrimaryHoverBrush}" />
+            <ProgressBar Value="{Binding ProgressPercent}" Maximum="100" Height="6" CornerRadius="3" Background="#1E293B" Foreground="{StaticResource BrandPrimaryBrush}" Margin="0,4,0,0" />
+          </StackPanel>
+        </Border>
+      </Grid>
+
+      <!-- Active Keystroke Wedge Transmission Control Bar -->
+      <Border Classes="Card">
+        <StackPanel Spacing="16">
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Grid.Column="0" Spacing="4">
+              <TextBlock Text="SIMULATION CONTROLS" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+              <TextBlock Text="Start will inject simulated scans into whatever window has active keyboard focus."
+                         FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" />
+            </StackPanel>
+            
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+              <!-- Start / Run Button -->
+              <Button Classes="SuccessBtn" Command="{Binding StartSimulationCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <TextBlock Text="▶" />
+                  <TextBlock Text="START (F8)" />
+                </StackPanel>
+              </Button>
+
+              <!-- Pause Button -->
+              <Button Classes="GhostBtn" Command="{Binding PauseSimulationCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <TextBlock Text="⏸" />
+                  <TextBlock Text="PAUSE (F9)" />
+                </StackPanel>
+              </Button>
+
+              <!-- Resume Button -->
+              <Button Classes="GhostBtn" Command="{Binding ResumeSimulationCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <TextBlock Text="▶" />
+                  <TextBlock Text="RESUME" />
+                </StackPanel>
+              </Button>
+
+              <!-- Single Step Button -->
+              <Button Classes="GhostBtn" Command="{Binding TriggerSingleStepCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <TextBlock Text="⏭" />
+                  <TextBlock Text="STEP (F10)" />
+                </StackPanel>
+              </Button>
+
+              <!-- Stop Button -->
+              <Button Classes="DangerBtn" Command="{Binding StopSimulationCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <TextBlock Text="⏹" />
+                  <TextBlock Text="STOP" />
+                </StackPanel>
+              </Button>
+            </StackPanel>
+          </Grid>
+
+          <!-- Current Transmitting Payload Inspector Preview -->
+          <StackPanel Spacing="6">
+            <TextBlock Text="ACTIVE PAYLOAD OUTPUT" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" />
+            <TextBox Classes="CodeBox" Text="{Binding LastPayload}" IsReadOnly="True" FontSize="16" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- Real-Time Transmission Audit Log -->
+      <Border Classes="Card">
+        <StackPanel Spacing="12">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Grid.Column="0" Text="REAL-TIME SCAN TRANSMISSION LOG" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" LetterSpacing="1" />
+            <TextBlock Grid.Column="1" Text="Showing last 50 transmissions" FontSize="11" Foreground="{StaticResource TextMutedBrush}" />
+          </Grid>
+          
+          <Border Background="{StaticResource BgInputDarkBrush}" BorderBrush="{StaticResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="6" Height="140">
+            <ListBox ItemsSource="{Binding RecentTransmissions}" Background="Transparent" Foreground="{StaticResource TextSecondaryBrush}" FontFamily="Consolas, monospace" FontSize="12">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding}" Padding="2,1" />
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </Border>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
