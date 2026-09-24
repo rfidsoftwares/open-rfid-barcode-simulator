@@ -15,9 +15,23 @@
 
 Simulate **1D/2D Barcode Scanners**, **HF RFID (13.56 MHz)**, **NFC (NDEF)**, **UHF RAIN RFID (EPC Gen2 / 860–960 MHz)**, **ICAO Doc 9303 MRZ Passports**, **Industrial Digital Scales (Mettler-Toledo / CAS)**, and **BLE Beacons (iBeacon & Eddystone)**. Feeds simulated tag and sensor reads into any web application, ERP, WMS, POS, or desktop software via sub-millisecond hardware keystrokes or human-like typing simulation.
 
-[**Explore Enterprise Solutions ↗**](https://rfidsoftwares.com/) • [**Documentation**](SPECIFICATION_AND_ARCHITECTURE.md) • [**Download Releases**](https://rfidsoftwares.com/)
+[**Explore Enterprise Solutions ↗**](https://rfidsoftwares.com/) • [**Documentation**](SPECIFICATION_AND_ARCHITECTURE.md) • [**GitHub Releases ↗**](https://github.com/rfidsoftwares/open-rfid-barcode-simulator/releases)
 
 </div>
+
+---
+
+## 📥 Direct Downloads (Portable • Zero-Install)
+
+No runtime or installation required. Download and double-click to run immediately:
+
+| Package / Binary | Target Platform | Description | Direct Download |
+| :--- | :---: | :--- | :---: |
+| **🚀 OpenRFID Desktop GUI** | Windows x64 | Full graphical studio with 8 simulator tabs & floating mini-HUD | [**Download .exe (92 MB)**](https://github.com/rfidsoftwares/open-rfid-barcode-simulator/releases/latest/download/OpenRFID-Simulator-UI.exe) |
+| **⚡ OpenScanSim Headless CLI** | Windows x64 | High-throughput command-line tool for test automation & CI/CD | [**Download CLI .exe (67 MB)**](https://github.com/rfidsoftwares/open-rfid-barcode-simulator/releases/latest/download/openscansim-cli.exe) |
+| **📦 Complete Portable Zip Package** | Windows x64 | GUI + CLI + Documentation + License in a single archive | [**Download .zip (69 MB)**](https://github.com/rfidsoftwares/open-rfid-barcode-simulator/releases/latest/download/OpenRFID-Simulator-v1.0.0-win-x64.zip) |
+
+> **Portable Execution**: These are fully self-contained single-file native executables. You do not need .NET runtime installed.
 
 ---
 
